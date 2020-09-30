@@ -1,0 +1,31 @@
+DOcker install steps
+-----------------------
+curl -fsSL https://get.docker.com -o get-docker.sh
+sh get-docker.sh
+
+JDK install
+----------------
+
+apt-cache search jdk
+sudo apt install openjdk-8-jdk -y
+
+Jenkins install
+----------------
+sudo apt update
+wget -q -O - https://pkg.jenkins.io/debian-stable/jenkins.io.key | sudo apt-key add -
+sudo sh -c 'echo deb https://pkg.jenkins.io/debian-stable binary/ > \    /etc/apt/sources.list.d/jenkins.list'
+sudo apt-get update
+sudo apt-get install jenkins
+
+Maven Install
+------------------
+cd /tmp/
+wget https://mirrors.estointernet.in/apache/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
+cd /opt/
+sudo tar -xvzf /tmp/apache-maven-3.6.3-bin.tar.gz
+ls
+cd apache-maven-3.6.3/
+chmod g+w,o+w apache-maven-3.6.3
+# edit /etc/environment and the following lines to the end
+M2_HOME=/opt/apache-maven-3.6.3
+PATH=$PATH:$M2_HOME/bin
