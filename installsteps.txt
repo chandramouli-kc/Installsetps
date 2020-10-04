@@ -45,3 +45,19 @@ URL for access provide admin/admin as credentias
 https:<hostname>:8082/ui/login
 after login change password and select whic ever repositorie you needed
 
+Sonarqube installation
+-----------------------------------
+
+update below entry in /etc/apt/sourcelist
+ dec[trusted=yes] http://downloads.sourceforge.net/project/sonar-pkg/deb binary/
+
+ ## sudo apt update
+ ## sudo apt-cache madison sonar | less 
+ ## sudo apt install sonar -yes
+ ## sudo systemctl service enable sonar
+ ## sudo systemctl service status sonar
+ ## sudo systemctl service start sonar
+  URL:
+  http://<hostname>:9000
+  genarate tokenkey and preservr it select which type of project (java,dotnet etc)
+  
