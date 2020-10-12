@@ -3,6 +3,12 @@ DOcker install steps
 curl -fsSL https://get.docker.com -o get-docker.sh
 sh get-docker.sh
 
+Docker COmpose install
+==========================
+ sudo apt  install docker-compose
+
+docker-compose -v
+
 JDK install
 ----------------
 
