@@ -70,3 +70,11 @@ update below entry in /etc/apt/sourcelist
   http://<hostname>:9000
   genarate tokenkey and preservr it select which type of project (java,dotnet etc)
   
+
+Ansible Install
+
+sudo apt update
+$ sudo apt install software-properties-common
+$ sudo apt-add-repository --yes --update ppa:ansible/ansible
+$ sudo apt install ansible
+
