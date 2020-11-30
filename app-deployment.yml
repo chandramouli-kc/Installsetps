@@ -1,19 +1,22 @@
+--- 
 apiVersion: apps/v1
 kind: Deployment
-metadata:
- name: app-deployment 
-spec:
+metadata: 
+  labels: 
+    app: app-deploy
+    name: app-deploy
+spec: 
+  replicas: 3
   selector: 
-    matchLabels:
-      app: app-deployment
- replicas: 3
- template:
-   metadata:
-     labels:
-       app: app-deployment
-   spec:
-    containers:
-       - name: app-deployment
-         image: ialokkr/native_poc:1.0
-         ports:
+    matchLabels: 
+      app: app-deploy
+  template: 
+    metadata: 
+      labels: 
+        app: app-deploy
+    spec: 
+      containers: 
+        - image: "ialokkr/native_poc:1.0"
+          name: app-deploy
+          ports: 
             - containerPort: 80
