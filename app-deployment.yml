@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
       - name: app-depl
-        image: ialokkr/native_poc:1.0
+        image: rajanirr/devops-angular-client:latest
         ports:
         - containerPort: 80
