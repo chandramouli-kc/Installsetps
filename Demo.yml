@@ -19,48 +19,41 @@ spec:
   strategy:
     jenkinsPipelineStrategy:
       jenkinsfile: |-
-         pipeline {
-            agent {
-              node {
-                // spin up a node.js slave pod to run this build on
-                label 'nodejs'
-              }
-            }
-            options {
-                // set a timeout of 20 minutes for this pipeline
-                timeout(time: 20, unit: 'MINUTES')
-            }
-
-            stages {
-                stage('preamble') {
-                    steps {
-                        script {
-                            openshift.withCluster() {
-                                openshift.withProject() {
-                                    echo "Using project: ${openshift.project()}"
-                                }
-                            }
-                        }
+        pipeline {
+              stages {
+                    stage {
+                      openshift.withCluster() { 
+  openshift.withProject("refmodelproject") {
+  
+    def buildConfigExists = openshift.selector("bc", "codelikethewind").exists() 
+    
+    if(!buildConfigExists){ 
+      openshift.newBuild("--name=codelikethewind", "--docker-image=registry.redhat.io/jboss-eap-7/eap74-openjdk8-openshift-rhel7", "--binary") 
+    } 
+    
+    openshift.selector("bc", "codelikethewind").startBuild("--from-file=target/simple-servlet-0.0.1-SNAPSHOT.war", "--follow") } }
                     }
-                }
-              stage('cleanup') {
-                    steps {
-                        script {
-                            openshift.withCluster() {
-                                openshift.withProject() {
-                                    // delete everything with this template label
-                                    openshift.selector("all", [ template : templateName ]).delete()
-                                    // delete any secrets with this template label
-                                    if (openshift.selector("secrets", templateName).exists()) {
-                                        openshift.selector("secrets", templateName).delete()
-                                    }
-                                }
-                            }
-                        } // script
-                    } // steps
-                } // stage
-              } // stages
-                      } // pipeline
+                  stage {
+                    openshift.withCluster() { 
+  openshift.withProject("refmodelproject") { 
+    def deployment = openshift.selector("dc", "codelikethewind") 
+    
+    if(!deployment.exists()){ 
+      openshift.newApp('codelikethewind', "--as-deployment-config").narrow('svc').expose() 
+    } 
+    
+    timeout(5) { 
+      openshift.selector("dc", "codelikethewind").related('pods').untilEach(1) { 
+        return (it.object().status.phase == "Running") 
+      } 
+    } 
+  } 
+}
+                  }  
+              } //stages           
+
+
+        } // pipeline
                   type: JenkinsPipeline
                 successfulBuildsHistoryLimit: 5
               status:
